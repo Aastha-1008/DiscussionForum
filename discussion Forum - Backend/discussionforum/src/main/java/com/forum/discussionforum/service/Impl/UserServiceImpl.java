@@ -1,5 +1,6 @@
 package com.forum.discussionforum.service.Impl;
 
+import com.forum.discussionforum.entity.Login;
 import com.forum.discussionforum.entity.User;
 import com.forum.discussionforum.repository.UserRepository;
 import com.forum.discussionforum.service.UserService;
@@ -26,6 +27,10 @@ public class UserServiceImpl implements UserService {
         return userRepository.getByUserName(name);
     }
 
+    public User checkUserCredentials(Login login){
+        return userRepository.checkUserCredentials(login.getUsername() , login.getPassword());
+    }
+
     public void setUser(User currUser , User newUser){
         currUser.setName(newUser.getName());
         currUser.setEmail(newUser.getEmail());
@@ -43,6 +48,7 @@ public class UserServiceImpl implements UserService {
 
     public void updateUser(User user){
         User currUser = userRepository.getById(user.getId());
+        if (currUser == null)return;
         setUser(currUser,user);
     }
 

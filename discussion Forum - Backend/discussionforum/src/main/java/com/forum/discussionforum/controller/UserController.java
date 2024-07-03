@@ -1,5 +1,6 @@
 package com.forum.discussionforum.controller;
 
+import com.forum.discussionforum.entity.Login;
 import com.forum.discussionforum.entity.User;
 import com.forum.discussionforum.response.GenericResponse;
 import com.forum.discussionforum.service.UserService;
@@ -36,6 +37,14 @@ public class UserController {
         return GenericResponse.builder().statusCode(HttpStatus.OK).msg("Successfully fetch user by using name").body(listOfUser).build();
     }
 
+    @GetMapping("/login/")
+    public GenericResponse checkUserCredentials(@RequestBody Login login){
+        User user = userService.checkUserCredentials(login);
+        if(user == null)
+            return GenericResponse.builder().statusCode(HttpStatus.OK).msg("No user exist").build();
+        return GenericResponse.builder().statusCode(HttpStatus.OK).msg("User exist").body(user).build();
+    }
+
     @PostMapping("/")
     public GenericResponse createUser(@RequestBody User user){
         if(user == null)
@@ -45,7 +54,7 @@ public class UserController {
         return GenericResponse.builder().statusCode(HttpStatus.OK).msg("Successfully user created").build();
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/")
     public GenericResponse updateUser(@RequestBody User user){
         if(user == null)
             return GenericResponse.builder().statusCode(HttpStatus.BAD_GATEWAY).build();
